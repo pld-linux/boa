@@ -135,7 +135,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README CHANGES docs/*.html docs/*.png
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/boa.conf
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
 #%attr(755,root,root) %{_cgi_bin}
 %attr(750,root,root) %dir /var/log/%{name}/
