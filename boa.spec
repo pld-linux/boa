@@ -13,6 +13,7 @@ Group:		Networking/Daemons
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
+Patch1:		%{name}-logrotate.patch
 URL:		http://www.boa.org/
 BuildRequires:	autoconf
 BuildRequires:	flex
@@ -51,6 +52,7 @@ systemowych.
 %prep
 %setup -q
 %patch0 -p1
+%patch1	-p1
 
 %build
 cd src
