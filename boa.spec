@@ -132,6 +132,13 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del boa
 fi
 
+%triggerpostun -- boa < 0.94.14-0.rc20.0
+if [ -f /etc/httpd/boa.conf.rpmsave ]; then
+	echo "warning: moving /etc/httpd/boa.conf.rpmsave to /etc/boa.conf"
+	mv /etc/boa.conf /etc/boa.conf.rpmnew
+	mv /etc/httpd/boa.conf.rpmsave /etc/boa.conf
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc README CHANGES docs/*.html docs/*.png
