@@ -5,8 +5,6 @@ Version:	0.94.12pre1
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
