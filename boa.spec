@@ -17,10 +17,11 @@ Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/userdel
+Prereq:		rc-scripts
+Prereq:		/sbin/chkconfig
 BuildRequires:	flex
 BuildRequires:	sgml-tools
 BuildRequires:	autoconf
-Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
 
@@ -94,7 +95,6 @@ else
         /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
-
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing user http UID=51"
@@ -111,7 +111,6 @@ if [ -f /var/lock/subsys/httpd ]; then
 else
         echo "Run \"/etc/rc.d/init.d/boa start\" to start boa http daemon."
 fi
-
 
 %preun
 if [ "$1" = "0" ]; then
