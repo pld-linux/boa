@@ -115,3 +115,20 @@ diff -ur boa-0.93.16.1/util/resolver.pl boa-0.93.16.1.new/util/resolver.pl
  # Otherwise, send the output of this program wherever you want:
  #  resolver.pl access_log >access_log_resolved
  
+diff -ur boa-0.93.16.1/util/Makefile boa-0.93.16.1.new/util/Makefile
+--- boa-0.93.16.1/util/Makefile	Sun Nov  7 23:18:21 1999
++++ boa-0.93.16.1.new/util/Makefile	Fri Jul 16 17:29:45 1999
+@@ -4,10 +4,10 @@
+ 	rm cpsel cp-test 
+ 
+ cpsel:	cpsel.c	cpsel.config.h
+-	gcc -o cpsel cpsel.c
++	gcc $(RPM_OPT_FLAGS) -o cpsel cpsel.c
+ 
+ cp-test: cp-test.c
+-	gcc -o cp-test cp-test.c
++	gcc $(RPM_OPT_FLAGS) -o cp-test cp-test.c
+ 	
+ boa_indexer: index_dir.c
+-	gcc -o boa_indexer index_dir.c
++	gcc $(RPM_OPT_FLAGS) -o boa_indexer index_dir.c
