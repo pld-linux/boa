@@ -41,7 +41,7 @@
 -User nobody
 -Group nogroup
 +User http
-+Group http
++#Group http
  
  # ServerAdmin: The email address where server problems should be sent.
  # Note: this is not currently used, except as an environment variable
