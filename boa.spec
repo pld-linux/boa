@@ -42,6 +42,7 @@ systemowych.
 
 %build
 cd src
+CFLAGS="$RPM_OPT_FLAGS -DINET6"
 %configure
 %{__make}
 (cd ../docs; make boa.html )
