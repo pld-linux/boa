@@ -20,16 +20,16 @@
  #endif
  
  /***** Various stuff that you may want to tweak, but probably shouldn't *****/
---- ./src/ip.c.orig	Mon Jul 30 13:47:03 2001
-+++ ./src/ip.c	Mon Jul 30 14:16:59 2001
+--- ./src/ip.c.org      Sat Dec 22 23:29:05 2001
++++ ./src/ip.c  Sat Dec 22 23:33:04 2001
 @@ -43,6 +43,7 @@
      */
- 
+
  #include "boa.h"
 +#include "compat.h"
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
+ #include <arpa/inet.h>          /* inet_ntoa */
+
+ /* Binds to the existing server_s, based on the configuration string
 @@ -89,8 +90,6 @@
                      dest, len, NULL, 0, NI_NUMERICHOST)) {
          fprintf(stderr, "[IPv6] getnameinfo failed\n");
