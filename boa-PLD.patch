@@ -68,7 +68,7 @@
  # Comment out to disable server non user files.
  
 -DocumentRoot /var/www
-+DocumentRoot /home/httpd/html
++DocumentRoot /home/services/httpd/html
  
  # UserDir: The name of the directory which is appended onto a user's home
  # directory if a ~user request is recieved.
@@ -86,5 +86,5 @@
  # Example: ScriptAlias /htbin/ /www/htbin/
  
 -ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-+ScriptAlias /cgi-bin/ /home/httpd/cgi-bin/
++ScriptAlias /cgi-bin/ /home/services/httpd/cgi-bin/
  

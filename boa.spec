@@ -66,14 +66,14 @@ cd ../docs
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
 	$RPM_BUILD_ROOT/var/log/httpd \
-	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
+	$RPM_BUILD_ROOT/home/services/httpd/{cgi-bin,html} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8} \
 	$RPM_BUILD_ROOT/etc/logrotate.d
 
 install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
 
-install src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin/
-install examples/* $RPM_BUILD_ROOT/home/httpd/cgi-bin/
+install src/*.pl $RPM_BUILD_ROOT/home/services/httpd/cgi-bin/
+install examples/* $RPM_BUILD_ROOT/home/services/httpd/cgi-bin/
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
@@ -103,7 +103,7 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
         fi
 else
 	echo "Creating user http UID=51"
-        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+        /usr/sbin/useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
 %postun
@@ -136,8 +136,8 @@ fi
 %attr(750, root,root) %dir %{_sysconfdir}
 %attr(640, root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(640, root,root) %config(noreplace) /etc/logrotate.d/%{name}
-%attr(755, root,root) /home/httpd/html
-%attr(755, root,root) /home/httpd/cgi-bin
+%attr(755, root,root) /home/services/httpd/html
+%attr(755, root,root) /home/services/httpd/cgi-bin
 %attr(750, root,root) %dir /var/log/httpd/
 %attr(640, root,root) %ghost /var/log/httpd/*
 %attr(755, root,root) %{_sbindir}/*
