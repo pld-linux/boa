@@ -109,7 +109,7 @@
  # an error (though accessing files in the directory are still ok).
  
 -DirectoryMaker /usr/lib/boa/boa_indexer
-+DirectoryMaker /usr/sbin/boa/boa_indexer
++DirectoryMaker /usr/sbin/boa_indexer
  
  # DirectoryCache: If DirectoryIndex doesn't exist, and DirectoryMaker
  # has been commented out, the the on-the-fly indexing of Boa can be used
