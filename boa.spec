@@ -116,8 +116,8 @@ fi
 %post
 /sbin/chkconfig --add %{name}
 
-if [ -f /var/lock/subsys/httpd ]; then
-        /etc/rc.d/init.d/httpd restart 1>&2
+if [ -f /var/lock/subsys/boa ]; then
+        /etc/rc.d/init.d/boa restart 1>&2
 else
         echo "Run \"/etc/rc.d/init.d/boa start\" to start boa http daemon."
 fi
