@@ -1,8 +1,8 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.8.2
-Release:	2
+Version:	0.94.8.3
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -20,8 +20,9 @@ Prereq:		%{_sbindir}/userdel
 BuildRequires:	flex
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-%define		_sysconfdir	/etc/httpd
 Obsoletes:	apache
+
+%define		_sysconfdir	/etc/httpd
 
 %description
 A high speed, lightweight web server (HTTP protocol). Based on direct
@@ -42,7 +43,7 @@ systemowych.
 
 %build
 cd src
-CFLAGS="$RPM_OPT_FLAGS -DINET6"
+CFLAGS="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-O -g} -DINET6"
 %configure
 %{__make}
 (cd ../docs; make boa.html )
@@ -65,7 +66,7 @@ install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
 touch $RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
 
-gzip -9nf README $RPM_BUILD_ROOT%{_mandir}/man*/*
+gzip -9nf README
 
 %clean
 rm -rf $RPM_BUILD_ROOT
