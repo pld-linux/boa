@@ -27,11 +27,11 @@ Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Provides:	httpd
 Provides:	webserver
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
 Obsoletes:	httpd
 Obsoletes:	thttpd
 Obsoletes:	webserver
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/httpd
 
@@ -84,8 +84,6 @@ install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
 touch $RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
 
-gzip -9nf README ChangeLog
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -135,7 +133,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz docs/*.html docs/*.png
+%doc README ChangeLog docs/*.html docs/*.png
 %attr(750, root,root) %dir %{_sysconfdir}
 %attr(640, root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(640, root,root) %config(noreplace) /etc/logrotate.d/%{name}
