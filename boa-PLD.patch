@@ -1,7 +1,7 @@
-diff -urN boa-0.93.16.1.orig/examples/boa.conf boa-0.93.16.1/examples/boa.conf
---- boa-0.93.16.1.orig/examples/boa.conf	Sat Aug 14 18:48:40 1999
-+++ boa-0.93.16.1/examples/boa.conf	Sat Aug 14 18:51:40 1999
-@@ -24,8 +24,8 @@
+diff -bruN boa-0.94.8.2/boa.conf boa-0.94.8.2.pld/boa.conf
+--- boa-0.94.8.2/boa.conf	Sun Jan 30 02:39:48 2000
++++ boa-0.94.8.2.pld/boa.conf	Sun Sep 10 04:35:38 2000
+@@ -45,8 +45,8 @@
  #  User: The name or UID the server should run as.
  # Group: The group name or GID the server should run as.
  
@@ -11,99 +11,66 @@ diff -urN boa-0.93.16.1.orig/examples/boa.conf boa-0.93.16.1/examples/boa.conf
 +Group http
  
  # ServerAdmin: The email address where server problems should be sent.
- # Note: this is not currently used.
-@@ -36,28 +36,28 @@
- # with /, it is considered relative to the server root.
+ # Note: this is not currently used, except as an environment variable
+@@ -59,7 +59,7 @@
  # Set to /dev/null if you don't want errors logged.
+ # If unset, defaults to /dev/stderr
  
 -ErrorLog /var/log/boa/error_log
 +ErrorLog /var/log/httpd/error_log
- 
- # AccessLog: The location of the access log file. If this does not
- # start with /, it is considered relative to the server root.
+ # Please NOTE: Sending the logs to a pipe ('|'), as shown below,
+ #  is somewhat experimental and might fail under heavy load.
+ # "Usual libc implementations of printf will stall the whole
+@@ -71,7 +71,7 @@
  # Comment out or set to /dev/null (less effective) to disable 
  # Access logging.
  
 -AccessLog /var/log/boa/access_log
 +AccessLog /var/log/httpd/access_log
- 
- # RefererLog: The location of the referer log file. If this does not
- # start with /, it is considered relative to the server root.
- # Comment out or set to /dev/null (less effective) to disable
- # referer logging.
- 
--RefererLog /var/log/boa/referer_log
-+RefererLog /var/log/httpd/referer_log
- 
- # AgentLog: The location of the agent log file. If this does not
- # start with /, it is considered relative to the server root.
- # Comment out or set to /dev/null (less effective) to disable
- # User-Agent logging.
- 
--AgentLog /var/log/boa/agent_log
-+AgentLog /var/log/httpd/agent_log
- 
- # VerboseCGILogs: this is just a logical switch.
- # Comment out to disable.
-@@ -72,7 +72,7 @@
- 
+ # Please NOTE: Sending the logs to a pipe ('|'), as shown below,
+ #  is somewhat experimental and might fail under heavy load.
+ # "Usual libc implementations of printf will stall the whole
+@@ -108,7 +108,7 @@
  # DocumentRoot: The root directory of the HTML documents.
+ # Comment out to disable server non user files.
  
 -DocumentRoot /var/www
 +DocumentRoot /home/httpd/html
  
- # ChRoot: Boa root '/' directory. This is useful to improve security of
- # your system. Don't forget that ALL DIRECTORIES used by boa except logs
-@@ -93,12 +93,12 @@
+ # UserDir: The name of the directory which is appended onto a user's home
+ # directory if a ~user request is recieved.
+@@ -127,7 +127,7 @@
+ # DirectoryIndex are commented out, accessing a directory will give
+ # an error (though accessing files in the directory are still ok).
  
- DirectoryIndex index.html
+-DirectoryMaker /usr/lib/boa/boa_indexer
++DirectoryMaker /usr/sbin/boa/boa_indexer
  
--DirectoryMaker /usr/local/sbin/boa_indexer
-+DirectoryMaker /usr/sbin/boa_indexer
- 
- # LocalCodepage: Local codepage. This is send to client in 'Content-Type:'
- # header by default.
- 
--#LocalCodepage iso-8859-1
-+#LocalCodepage iso-8859-2
- 
- # Codepage: Load codepage conversion table from file. This table will be used
- # on-the-fly conversion.
-@@ -161,7 +161,7 @@
+ # DirectoryCache: If DirectoryIndex doesn't exist, and DirectoryMaker
+ # has been commented out, the the on-the-fly indexing of Boa can be used
+@@ -182,5 +182,5 @@
  # ScriptAlias: Maps a virtual path to a directory for serving scripts
  # Example: ScriptAlias /htbin/ /www/htbin/
  
 -ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 +ScriptAlias /cgi-bin/ /home/httpd/cgi-bin/
  
- # VirtualHost: Maps a virtual host to a directory.
- # Example: VirtualHost cz.boa.org /html/htdocs/boa/
-diff -urN boa-0.93.16.1.orig/src/Makefile.in boa-0.93.16.1/src/Makefile.in
---- boa-0.93.16.1.orig/src/Makefile.in	Sat Aug 14 18:48:40 1999
-+++ boa-0.93.16.1/src/Makefile.in	Sat Aug 14 18:48:45 1999
-@@ -9,16 +9,13 @@
+diff -bruN boa-0.94.8.2/src/Makefile.in boa-0.94.8.2.pld/src/Makefile.in
+--- boa-0.94.8.2/src/Makefile.in	Sat Feb 12 22:52:45 2000
++++ boa-0.94.8.2.pld/src/Makefile.in	Sun Sep 10 04:37:16 2000
+@@ -13,7 +13,7 @@
+ # Add -pg to CFLAGS and LDFLAGS to get profiling output with gcc/gprof
  
- # Add -DNO_DAEMON if you do not want the server to fork upon launch
- LDFLAGS = @LIBS@
--CFLAGS = -O
-+CFLAGS = $(RPM_OPT_FLAGS)
- 
- MANDIR = /usr/local/man
- BINDIR = /usr/local/sbin
- 
- # FreeBSD's make doesn't like `ifdef`, but likes `.ifdef`
--ifdef INET6
--LDFLAGS += -L/usr/inet6/lib -linet6
--CFLAGS += -DINET6 -I/usr/inet6/include
--endif
-+CFLAGS += -DINET6
+ LDFLAGS = @LIBS@ -g 
+-CFLAGS = -O -Wall -g
++CFLAGS = $(RPM_OPT_FLAGS) -DINET6
  
  # Change these if necessary
  
-diff -urN boa-0.93.16.1.orig/src/defines.h boa-0.93.16.1/src/defines.h
---- boa-0.93.16.1.orig/src/defines.h	Sat Aug 14 18:48:40 1999
-+++ boa-0.93.16.1/src/defines.h	Sat Aug 14 18:48:45 1999
-@@ -26,7 +26,7 @@
+diff -bruN boa-0.94.8.2/src/defines.h boa-0.94.8.2.pld/src/defines.h
+--- boa-0.94.8.2/src/defines.h	Mon May  1 22:33:25 2000
++++ boa-0.94.8.2.pld/src/defines.h	Sun Sep 10 04:38:02 2000
+@@ -27,7 +27,7 @@
  /***** Change this, or use -c on the command line to specify it *****/
  
  #ifndef SERVER_ROOT
@@ -111,46 +78,4 @@ diff -urN boa-0.93.16.1.orig/src/defines.h boa-0.93.16.1/src/defines.h
 +#define SERVER_ROOT "/etc/httpd"
  #endif
  
- /***** Logs *****************************************************************/
-@@ -41,7 +41,7 @@
- #define USE_NLS							 		1
- #define USE_NLS_REFERER_REDIR		1
- #define USE_CHARSET_HEADER   		1
--#define DEFAULT_CHARSET      "iso-8859-1"
-+#define DEFAULT_CHARSET      "iso-8859-2"
- 
- /****** Authorization ******************************************************/
- 
-diff -urN boa-0.93.16.1.orig/util/Makefile boa-0.93.16.1/util/Makefile
---- boa-0.93.16.1.orig/util/Makefile	Sat Aug 14 18:48:40 1999
-+++ boa-0.93.16.1/util/Makefile	Sat Aug 14 18:48:45 1999
-@@ -4,10 +4,10 @@
- 	rm cpsel cp-test 
- 
- cpsel:	cpsel.c	cpsel.config.h
--	gcc -o cpsel cpsel.c
-+	gcc $(RPM_OPT_FLAGS) -o cpsel cpsel.c
- 
- cp-test: cp-test.c
--	gcc -o cp-test cp-test.c
-+	gcc $(RPM_OPT_FLAGS) -o cp-test cp-test.c
- 	
- boa_indexer: index_dir.c
--	gcc -o boa_indexer index_dir.c
-+	gcc $(RPM_OPT_FLAGS) -o boa_indexer index_dir.c
-diff -urN boa-0.93.16.1.orig/util/resolver.pl boa-0.93.16.1/util/resolver.pl
---- boa-0.93.16.1.orig/util/resolver.pl	Sat Aug 14 18:48:40 1999
-+++ boa-0.93.16.1/util/resolver.pl	Sat Aug 14 18:48:45 1999
-@@ -1,10 +1,10 @@
--#!/usr/local/bin/perl
-+#!/usr/bin/perl
- 
- # IP address resolver for Boa
- 
- # If you want an "in place" change to the log file,
- # change the first line to
--#!/usr/local/bin/perl -i.bak
-+#!/usr/bin/perl -i.bak
- # Otherwise, send the output of this program wherever you want:
- #  resolver.pl access_log >access_log_resolved
- 
+ /***** Various stuff that you may want to tweak, but probably shouldn't *****/
