@@ -5,6 +5,7 @@ Version:	0.93.16.1
 Release:	1
 Copyright:	GPL
 Group:		Networking/Daemons
+Group(pl):	Sieciowe/Serwery
 Source0:	http://www.cz.boa.org/updates/%{name}-%{version}.tar.gz
 Source1:	boa.init
 Patch0:		boa-PLD.patch
@@ -31,8 +32,8 @@ resource use.
 Niezwykle szybki i wysoko wydajny serwer WWW (protokó³ HTTP).
 Bazuje na bezpo¶rednim u¿yciu funkcji systemowej select(2)
 dziêki czemu mo¿e obs³ugiwaæ wiele po³±czeñ równocze¶nie bez
-fork()owania co w efekcje daje znacznie zwiêkszon± szybko¶æ
-dzia³ania oraz mniejsze zu¿ycie zasobów systemowych.
+fork()owania co w efekcie znacznie zwiêksza szybko¶æ
+dzia³ania oraz zmniejsza zu¿ycie zasobów systemowych.
 
 %prep
 %setup -q
@@ -47,10 +48,9 @@ make
 (cd ../docs; make boa.html )
 
 %install
-install -d		$RPM_BUILD_ROOT/etc/rc.d/init.d/
-install -d              $RPM_BUILD_ROOT/var/log/httpd
-install -d              $RPM_BUILD_ROOT/home/httpd/{cgi-bin,html}
-install -d		$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man1}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,/var/log/httpd} \
+	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man1}
 
 install -s		src/boa $RPM_BUILD_ROOT%{_sbindir}
 install -s		util/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
