@@ -2,7 +2,7 @@ Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.8.2
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -76,8 +76,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun
 if [ "$1" = "0" ]; then
-	%{_sbindir}/groupdel http > /dev/null 2>&1
 	%{_sbindir}/userdel http > /dev/null 2>&1
+	%{_sbindir}/groupdel http > /dev/null 2>&1
 fi
 
 %post
