@@ -79,3 +79,15 @@ diff -bruN boa-0.94.8.2/src/defines.h boa-0.94.8.2.pld/src/defines.h
  #endif
  
  /***** Various stuff that you may want to tweak, but probably shouldn't *****/
+diff -bruN boa-0.94.8.2/src/ip.c boa-0.94.8.2.pld/src/ip.c
+--- boa-0.94.8.2/src/ip.c	Sat Feb 12 22:52:45 2000
++++ boa-0.94.8.2.pld/src/ip.c	Sun Sep 10 04:47:32 2000
+@@ -89,8 +89,6 @@
+                     dest, len, NULL, 0, NI_NUMERICHOST)) {
+         fprintf(stderr, "[IPv6] getnameinfo failed\n");
+         *dest = '\0';
+-    } else {
+-        conn->local_ip_addr = strdup(host);
+     }
+ #ifdef WHEN_DOES_THIS_APPLY
+     if ((s->__ss_family == AF_INET6) &&
