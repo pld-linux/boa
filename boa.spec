@@ -41,7 +41,7 @@ systemowych.
 %build
 cd src
 %configure
-make
+%{__make}
 (cd ../docs; make boa.html )
 
 %install
