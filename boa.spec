@@ -44,7 +44,7 @@ systemowych.
 
 %build
 cd src
-CFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -DINET6"
+CFLAGS="%{rpmcflags} -DINET6"
 %configure
 %{__make}
 (cd ../docs; make boa.html )
@@ -75,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`getgid http`" ]; then
         if [ "`getgid http`" != "51" ]; then
-                echo "Warning:group http haven't gid=51. Corect this before install boa" 1>&2
+                echo "Warning:group http haven't gid=51. Correct this before install boa" 1>&2
                 exit 1
         fi
 else
@@ -83,7 +83,7 @@ else
 fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
         if [ "`id -u http`" != "51" ]; then
-                echo "Warning:user http haven't uid=51. Corect this before install boa" 1>&2
+                echo "Warning:user http haven't uid=51. Correct this before install boa" 1>&2
                 exit 1
         fi
 else
