@@ -11,6 +11,7 @@ Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
+# Source0-md5:	c8d6f46f9aa60909f171529068813fe0
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-logrotate.patch
