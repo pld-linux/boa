@@ -76,8 +76,8 @@ case "$1" in
 	exit $?
         ;;
   *)
-	msg_usage "$0 {start|stop|status|restart|reload|force-reload}"
-        exit 1
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 1
 esac
 
 exit $RETVAL
