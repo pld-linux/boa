@@ -12,8 +12,8 @@ Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-SA_LEN.patch
 URL:		http://www.boa.org/
-Provides:	httpd                                                           
-Provides:	webserver                                                       
+Provides:	httpd
+Provides:	webserver
 Prereq:		sh-utils
 Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
@@ -26,6 +26,9 @@ BuildRequires:	sgml-tools
 BuildRequires:	autoconf
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
+Obsoletes:	thttpd
+Obsoletes:	webserver
+Obsoletes:	httpd
 
 %define		_sysconfdir	/etc/httpd
 
@@ -70,7 +73,7 @@ install src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin/
 install examples/* $RPM_BUILD_ROOT/home/httpd/cgi-bin/
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
-install redhat/boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
+install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 install redhat/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
