@@ -35,20 +35,20 @@ make
 (cd ../docs; make boa.html )
 
 %install
-install -d $RPM_BUILD_ROOT/home/httpd/{htdocs,cgi-bin,html}
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man1}
-install -d $RPM_BUILD_ROOT/var/log/httpd
+install -d		$RPM_BUILD_ROOT/home/httpd/{htdocs,cgi-bin,html}
+install -d		$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man1}
+install -d		$RPM_BUILD_ROOT/var/log/httpd
 
-install -s src/boa $RPM_BUILD_ROOT%{_sbindir}
-install -s util/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
+install -s		src/boa $RPM_BUILD_ROOT%{_sbindir}
+install -s		util/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
 
-install -s util/cpsel $RPM_BUILD_ROOT/home/httpd/cgi-bin
-install util/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install -s		util/cpsel $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install			util/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
 
 install examples/*.conf $RPM_BUILD_ROOT/etc/httpd/conf/
-install docs/boa.1 $RPM_BUILD_ROOT%{_mandir}/man1/
+install docs/boa.1	$RPM_BUILD_ROOT%{_mandir}/man1/
 
-gzip -9nf README $RPM_BUILD_ROOT%{_mandir}/man1/*
+gzip -9nf		README $RPM_BUILD_ROOT%{_mandir}/man1/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
