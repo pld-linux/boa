@@ -5,8 +5,8 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.12
-Release:	3
+Version:	0.94.13
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
@@ -69,7 +69,6 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
 	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8} \
 	$RPM_BUILD_ROOT/etc/logrotate.d
-
 
 install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
 
