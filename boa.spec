@@ -7,7 +7,7 @@ Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
 %define	_rc	rc20
-Release:	0.%{_rc}.2
+Release:	0.%{_rc}.3
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
@@ -67,7 +67,7 @@ CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
-	$RPM_BUILD_ROOT/var/log/boa \
+	$RPM_BUILD_ROOT/var/log/{,archiv/}boa \
 	$RPM_BUILD_ROOT%{_sbindir} \
 	$RPM_BUILD_ROOT%{_mandir}/man8 \
 	$RPM_BUILD_ROOT/etc/logrotate.d \
@@ -139,6 +139,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
 #%attr(755,root,root) %{_cgi_bin}
 %attr(750,root,root) %dir /var/log/%{name}/
+%attr(750,root,root) %dir /var/log/archiv/%{name}/
 %attr(640,root,root) %ghost /var/log/%{name}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
