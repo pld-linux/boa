@@ -1,7 +1,7 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.8.3
+Version:	0.94.9
 Release:	2
 License:	GPL
 Group:		Networking/Daemons
@@ -19,6 +19,7 @@ Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/userdel
 BuildRequires:	flex
 BuildRequires:	sgml-tools
+BuildRequires:	autoconf
 Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
@@ -45,6 +46,7 @@ systemowych.
 %build
 cd src
 CFLAGS="%{rpmcflags} -DINET6"
+autoconf
 %configure
 %{__make}
 (cd ../docs; make boa.html )
@@ -79,6 +81,7 @@ if [ -n "`getgid http`" ]; then
                 exit 1
         fi
 else
+	echo "Creating group http GID=51"
         /usr/sbin/groupadd -g 51 -r -f http
 fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
@@ -87,13 +90,16 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
                 exit 1
         fi
 else
+	echo "Creating user http UID=51"
         /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
 
 %postun
 if [ "$1" = "0" ]; then
+	echo "Removing user http UID=51"
 	%{_sbindir}/userdel http > /dev/null 2>&1
+	echo "Removing group http GID=51"
 	%{_sbindir}/groupdel http > /dev/null 2>&1
 fi
 
