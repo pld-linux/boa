@@ -1,6 +1,71 @@
-diff -bruN boa-0.94.8.2/boa.conf boa-0.94.8.2.pld/boa.conf
---- boa-0.94.8.2/boa.conf	Sun Jan 30 02:39:48 2000
-+++ boa-0.94.8.2.pld/boa.conf	Sun Sep 10 04:35:38 2000
+--- ./src/compat.h.orig	Mon Jul 30 13:44:30 2001
++++ ./src/compat.h	Mon Jul 30 14:16:47 2001
+@@ -71,7 +71,7 @@
+ 
+ #ifdef INET6
+ #define SOCKADDR sockaddr_storage
+-#define S_FAMILY __s_family
++#define S_FAMILY __ss_family
+ #define SERVER_AF AF_INET6
+ #else
+ #define SOCKADDR sockaddr_in
+--- ./src/defines.h.orig	Mon Jul 30 13:45:47 2001
++++ ./src/defines.h	Mon Jul 30 13:46:46 2001
+@@ -27,7 +27,7 @@
+ /***** Change this, or use -c on the command line to specify it *****/
+ 
+ #ifndef SERVER_ROOT
+-#define SERVER_ROOT "/etc/boa"
++#define SERVER_ROOT "/etc/httpd"
+ #endif
+ 
+ /***** Various stuff that you may want to tweak, but probably shouldn't *****/
+--- ./src/ip.c.orig	Mon Jul 30 13:47:03 2001
++++ ./src/ip.c	Mon Jul 30 14:16:59 2001
+@@ -43,6 +43,7 @@
+     */
+ 
+ #include "boa.h"
++#include "compat.h"
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+@@ -89,8 +90,6 @@
+                     dest, len, NULL, 0, NI_NUMERICHOST)) {
+         fprintf(stderr, "[IPv6] getnameinfo failed\n");
+         *dest = '\0';
+-    } else {
+-        conn->local_ip_addr = strdup(host);
+     }
+ #ifdef WHEN_DOES_THIS_APPLY
+     if ((s->__ss_family == AF_INET6) &&
+--- ./src/request.c.orig	Mon Jul 30 13:48:11 2001
++++ ./src/request.c	Mon Jul 30 13:49:29 2001
+@@ -191,7 +191,10 @@
+     ascii_sockaddr(&remote_addr, conn->remote_ip_addr, NI_MAXHOST);
+ 
+     /* for possible use by CGI programs */
++    /* the structure doesn't contain port
+     conn->remote_port = ntohs(remote_addr.sin_port);
++     */
++    conn->remote_port = 0;
+ 
+     status.requests++;
+ 
+--- ./src/Makefile.in.orig	Mon Jul 30 13:52:33 2001
++++ ./src/Makefile.in	Mon Jul 30 14:11:26 2001
+@@ -14,7 +14,8 @@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+-CFLAGS = @CFLAGS@ -I.
++#CFLAGS = @CFLAGS@ -I.
++CFLAGS = @CFLAGS@
+ 
+ # Change these if necessary
+ 
+--- ./boa.conf.orig	Mon Jul 30 13:49:43 2001
++++ ./boa.conf	Mon Jul 30 13:52:00 2001
 @@ -45,8 +45,8 @@
  #  User: The name or UID the server should run as.
  # Group: The group name or GID the server should run as.
@@ -54,67 +119,4 @@ diff -bruN boa-0.94.8.2/boa.conf boa-0.94.8.2.pld/boa.conf
  
 -ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 +ScriptAlias /cgi-bin/ /home/httpd/cgi-bin/
- 
-diff -bruN boa-0.94.8.2/src/Makefile.in boa-0.94.8.2.pld/src/Makefile.in
---- boa-0.94.8.2/src/Makefile.in	Sat Feb 12 22:52:45 2000
-+++ boa-0.94.8.2.pld/src/Makefile.in	Sun Sep 10 04:37:16 2000
-@@ -12,7 +12,7 @@
- # Add -pg to CFLAGS and LDFLAGS to get profiling output with gcc/gprof
- 
--LDFLAGS = @LIBS@ -g 
--CFLAGS = -O -Wall -g
-+LDFLAGS = @LDFLAGS@
-+CFLAGS = @CFLAGS@
- 
- # Change these if necessary
- 
-diff -bruN boa-0.94.8.2/src/compat.h boa-0.94.8.2.pld/src/compat.h
---- boa-0.94.8.2/src/compat.h	Mon Apr 10 21:45:57 2000
-+++ boa-0.94.8.2.pld/src/compat.h	Sun Sep 10 05:02:16 2000
-@@ -71,7 +71,7 @@
- 
- #ifdef INET6
- #define SOCKADDR sockaddr_storage
--#define S_FAMILY __s_family
-+#define S_FAMILY __ss_family
- #define SERVER_AF AF_INET6
- #else
- #define SOCKADDR sockaddr_in
-diff -bruN boa-0.94.8.2/src/defines.h boa-0.94.8.2.pld/src/defines.h
---- boa-0.94.8.2/src/defines.h	Mon May  1 22:33:25 2000
-+++ boa-0.94.8.2.pld/src/defines.h	Sun Sep 10 04:38:02 2000
-@@ -27,7 +27,7 @@
- /***** Change this, or use -c on the command line to specify it *****/
- 
- #ifndef SERVER_ROOT
--#define SERVER_ROOT "/etc/boa"
-+#define SERVER_ROOT "/etc/httpd"
- #endif
- 
- /***** Various stuff that you may want to tweak, but probably shouldn't *****/
-diff -bruN boa-0.94.8.2/src/ip.c boa-0.94.8.2.pld/src/ip.c
---- boa-0.94.8.2/src/ip.c	Sat Feb 12 22:52:45 2000
-+++ boa-0.94.8.2.pld/src/ip.c	Sun Sep 10 04:47:32 2000
-@@ -89,8 +89,6 @@
-                     dest, len, NULL, 0, NI_NUMERICHOST)) {
-         fprintf(stderr, "[IPv6] getnameinfo failed\n");
-         *dest = '\0';
--    } else {
--        conn->local_ip_addr = strdup(host);
-     }
- #ifdef WHEN_DOES_THIS_APPLY
-     if ((s->__ss_family == AF_INET6) &&
-diff -bruN boa-0.94.8.2/src/request.c boa-0.94.8.2.pld/src/request.c
---- boa-0.94.8.2/src/request.c	Fri May 26 04:46:03 2000
-+++ boa-0.94.8.2.pld/src/request.c	Sun Sep 10 04:58:44 2000
-@@ -186,7 +186,10 @@
-     ascii_sockaddr(&remote_addr, conn->remote_ip_addr, NI_MAXHOST);
- 
-     /* for possible use by CGI programs */
-+    /* the structure doesn't contain port
-     conn->remote_port = ntohs(remote_addr.sin_port);
-+     */
-+    conn->remote_port = 0;
- 
-     status.requests++;
  
