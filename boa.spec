@@ -90,6 +90,15 @@ gzip -9nf README ChangeLog
 rm -rf $RPM_BUILD_ROOT
 
 %pre
+if [ -n "`getgid http`" ]; then
+        if [ "`getgid http`" != "51" ]; then
+	        echo "Error: group http doesn't have gid=51. Correct this before installing boa." 1>&2
+            exit 1
+        fi
+else
+        echo "Creating group http GID=51"
+        /usr/sbin/groupadd -g 51 -r -f http
+fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
         if [ "`id -u http`" != "51" ]; then
                 echo "Error: user http doesn't have uid=51. Correct this before installing boa." 1>&2
@@ -97,13 +106,15 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
         fi
 else
 	echo "Creating user http UID=51"
-        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" http 1>&2
+        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing user http UID=51"
 	/usr/sbin/userdel http > /dev/null 2>&1
+	echo "Removing group http GID=51"
+        /usr/sbin/groupdel http > /dev/null 2>&1
 fi
 
 %post
