@@ -1,32 +1,37 @@
+#
+# Conditional build:
+# _without_ipv6	- IPv4-only version (doesn't require IPv6 in kernel)
+#
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.12pre1
+Version:	0.94.12
 Release:	1
+Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
-Patch1:		%{name}-SA_LEN.patch
 URL:		http://www.boa.org/
-Provides:	httpd
-Provides:	webserver
-Prereq:		sh-utils
-Prereq:		%{_sbindir}/groupadd
-Prereq:		%{_sbindir}/groupdel
-Prereq:		%{_sbindir}/useradd
-Prereq:		%{_sbindir}/userdel
-Prereq:		rc-scripts
-Prereq:		/sbin/chkconfig
+BuildRequires:	autoconf
 BuildRequires:	flex
 BuildRequires:	sgml-tools
-BuildRequires:	autoconf
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+PreReq:		rc-scripts
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(post,preun):	/sbin/chkconfig
+Provides:	httpd
+Provides:	webserver
 Obsoletes:	apache
+Obsoletes:	httpd
 Obsoletes:	thttpd
 Obsoletes:	webserver
-Obsoletes:	httpd
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/httpd
 
@@ -46,15 +51,15 @@ systemowych.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 cd src
-CFLAGS="%{rpmcflags} -DINET6"
+CFLAGS="%{rpmcflags} %{!?_without_ipv6:-DINET6}"
 autoconf
 %configure
 %{__make}
-(cd ../docs; make boa.html )
+cd ../docs
+%{__make} boa.html
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -72,13 +77,13 @@ install examples/* $RPM_BUILD_ROOT/home/httpd/cgi-bin/
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
-install redhat/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install contrib/redhat/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
 touch $RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
 
-gzip -9nf README src/ChangeLog
+gzip -9nf README ChangeLog
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,7 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`getgid http`" ]; then
         if [ "`getgid http`" != "51" ]; then
-                echo "Warning:group http haven't gid=51. Correct this before install boa" 1>&2
+                echo "Error: group http doesn't have gid=51. Correct this before installing boa." 1>&2
                 exit 1
         fi
 else
@@ -95,7 +100,7 @@ else
 fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
         if [ "`id -u http`" != "51" ]; then
-                echo "Warning:user http haven't uid=51. Correct this before install boa" 1>&2
+                echo "Error: user http doesn't have uid=51. Correct this before installing boa." 1>&2
                 exit 1
         fi
 else
@@ -106,14 +111,13 @@ fi
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing user http UID=51"
-	%{_sbindir}/userdel http > /dev/null 2>&1
+	/usr/sbin/userdel http > /dev/null 2>&1
 	echo "Removing group http GID=51"
-	%{_sbindir}/groupdel http > /dev/null 2>&1
+	/usr/sbin/groupdel http > /dev/null 2>&1
 fi
 
 %post
-/sbin/chkconfig --add %{name}
-
+/sbin/chkconfig --add boa
 if [ -f /var/lock/subsys/boa ]; then
         /etc/rc.d/init.d/boa restart 1>&2
 else
@@ -130,7 +134,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz docs/*.html docs/*.png src/*.gz
+%doc *.gz docs/*.html docs/*.png
 %attr(750, root,http) %dir %{_sysconfdir}
 %attr(640, root,http) %config(noreplace) %{_sysconfdir}/*
 %attr(640, root,http) %config(noreplace) /etc/logrotate.d/%{name}

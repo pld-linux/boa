@@ -5,7 +5,7 @@
  #ifdef INET6
  #define SOCKADDR sockaddr_storage
 -#define S_FAMILY __s_family
-+#define S_FAMILY __ss_family
++#define S_FAMILY ss_family
  #define SERVER_AF AF_INET6
  #else
  #define SOCKADDR sockaddr_in
@@ -20,38 +20,6 @@
  #endif
  
  /***** Various stuff that you may want to tweak, but probably shouldn't *****/
---- ./src/ip.c.org      Sat Dec 22 23:29:05 2001
-+++ ./src/ip.c  Sat Dec 22 23:33:04 2001
-@@ -43,6 +43,7 @@
-     */
-
- #include "boa.h"
-+#include "compat.h"
- #include <arpa/inet.h>          /* inet_ntoa */
-
- /* Binds to the existing server_s, based on the configuration string
-@@ -89,8 +90,6 @@
-                     dest, len, NULL, 0, NI_NUMERICHOST)) {
-         fprintf(stderr, "[IPv6] getnameinfo failed\n");
-         *dest = '\0';
--    } else {
--        conn->local_ip_addr = strdup(host);
-     }
- #ifdef WHEN_DOES_THIS_APPLY
-     if ((s->__ss_family == AF_INET6) &&
---- ./src/request.c.orig	Mon Jul 30 13:48:11 2001
-+++ ./src/request.c	Mon Jul 30 13:49:29 2001
-@@ -191,7 +191,10 @@
-     ascii_sockaddr(&remote_addr, conn->remote_ip_addr, NI_MAXHOST);
- 
-     /* for possible use by CGI programs */
-+    /* the structure doesn't contain port
-     conn->remote_port = ntohs(remote_addr.sin_port);
-+     */
-+    conn->remote_port = 0;
- 
-     status.requests++;
- 
 --- ./src/Makefile.in.orig	Mon Jul 30 13:52:33 2001
 +++ ./src/Makefile.in	Mon Jul 30 14:11:26 2001
 @@ -14,7 +14,8 @@
