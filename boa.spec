@@ -1,15 +1,17 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.9
-Release:	2
-License:	GPL
+Version:	0.94.12pre1
+Release:	1
+License:	GPL v2
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
+Patch1:		%{name}-SA_LEN.patch
+URL:		http://www.boa.org/
 Provides:	httpd                                                           
 Provides:	webserver                                                       
 Prereq:		sh-utils
@@ -43,6 +45,7 @@ systemowych.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 cd src
@@ -54,23 +57,27 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,/var/log/httpd} \
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
+	$RPM_BUILD_ROOT/var/log/httpd \
 	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8}
+	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8} \
+	$RPM_BUILD_ROOT/etc/logrotate.d
 
-install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}
 
-install src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
-install examples/resolver.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
+
+install src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin/
+install examples/* $RPM_BUILD_ROOT/home/httpd/cgi-bin/
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
-install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
+install redhat/boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
+install redhat/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
 touch $RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
 
-gzip -9nf README
+gzip -9nf README src/ChangeLog
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -122,9 +129,10 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.gz docs/*.html docs/*.png docs/boa.{ps,sgml}
+%doc *.gz docs/*.html docs/*.png src/*.gz
 %attr(750, root,http) %dir %{_sysconfdir}
 %attr(640, root,http) %config %{_sysconfdir}/*
+%attr(640, root,http) %config(noreplace) /etc/logrotate.d/%{name}
 %attr(755, root,http) /home/httpd/html
 %attr(755, root,http) /home/httpd/cgi-bin
 %attr(750, root,http) %dir /var/log/httpd/
