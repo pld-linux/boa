@@ -16,6 +16,7 @@ Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/userdel
+Requires:	rc-scripts
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %define		_sysconfdir	/etc/httpd
