@@ -8,8 +8,7 @@ Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	boa.init
-#Patch0:		boa-PLD.patch
-#Patch1:		boa-0.93.16.1-ipv6-fix.patch
+Patch0:		boa-PLD.patch
 Provides:       httpd                                                           
 Provides:       webserver                                                       
 Prereq:		sh-utils
@@ -37,30 +36,29 @@ dzia³ania oraz zmniejsza zu¿ycie zasobów systemowych.
 
 %prep
 %setup -q
-#%patch0 -p1
-#%patch1 -p1
+%patch0 -p1
 
 %build
 cd src
 %configure
 make
-#(cd ../util; make )
 (cd ../docs; make boa.html )
 
 %install
 install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,/var/log/httpd} \
 	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man1}
+	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8}
 
 install -s		src/boa $RPM_BUILD_ROOT%{_sbindir}
-install -s		util/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
+install -s		src/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
 
-install -s		util/cpsel $RPM_BUILD_ROOT/home/httpd/cgi-bin
-install			util/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install			src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install			examples/resolver.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
 install	%{SOURCE1}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
-install examples/*.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
-install docs/boa.1	$RPM_BUILD_ROOT%{_mandir}/man1/
+install boa.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+
+install docs/boa.8	$RPM_BUILD_ROOT%{_mandir}/man8/
 
 touch			$RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
 gzip -9nf		README $RPM_BUILD_ROOT%{_mandir}/man*/* || :
@@ -91,7 +89,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.gz docs/*.html docs/*.gif
+%doc README.gz docs/*.html docs/*.png docs/boa.{ps,sgml}
 %attr(750, root,http) %dir /etc/httpd
 %attr(640, root,http) %config /etc/httpd/*
 %attr(755, root,http) /home/httpd/html
@@ -100,4 +98,4 @@ fi
 %attr(640, root,http) %ghost /var/log/httpd/*
 %attr(755, root,root) %{_sbindir}/*
 %attr(754, root,root) /etc/rc.d/init.d/%{name}
-%{_mandir}/man1/*
+%{_mandir}/man8/*
