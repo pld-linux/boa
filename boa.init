@@ -60,12 +60,8 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/boa ]; then
-		msg_show "Boa httpd"
-		msg_reload
-		busy
+		msg_reloading "Boa httpd"
 		killproc boa -HUP
-		deltext
-		ok		
 	else
 		msg_not_running "Boa httpd"
 		exit 1
