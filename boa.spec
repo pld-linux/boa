@@ -20,8 +20,8 @@ Prereq:		%{_sbindir}/userdel
 BuildRequires:	flex
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
 %define		_sysconfdir	/etc/httpd
+Obsoletes:	apache
 
 %description
 A high speed, lightweight web server (HTTP protocol). Based on direct
@@ -53,8 +53,7 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,/var/log/httpd} \
 	$RPM_BUILD_ROOT/home/httpd/{cgi-bin,html} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8}
 
-install -s src/boa $RPM_BUILD_ROOT%{_sbindir}
-install -s src/boa_indexer $RPM_BUILD_ROOT%{_sbindir}
+install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}
 
 install src/*.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
 install examples/resolver.pl $RPM_BUILD_ROOT/home/httpd/cgi-bin
