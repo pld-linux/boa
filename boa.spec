@@ -17,6 +17,7 @@ Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/userdel
+BuildRequires:	flex
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
