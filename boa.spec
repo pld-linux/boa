@@ -134,7 +134,7 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz docs/*.html docs/*.png src/*.gz
 %attr(750, root,http) %dir %{_sysconfdir}
-%attr(640, root,http) %config %{_sysconfdir}/*
+%attr(640, root,http) %config(noreplace) %{_sysconfdir}/*
 %attr(640, root,http) %config(noreplace) /etc/logrotate.d/%{name}
 %attr(755, root,http) /home/httpd/html
 %attr(755, root,http) /home/httpd/cgi-bin
