@@ -6,13 +6,13 @@ Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
-%define	_rc	rc17
-Release:	0.%{_rc}.4
+%define	_rc	rc20
+Release:	0.%{_rc}.1
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://www.boa.org/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	d668ef85b3d2df3dc9832555fdce8b70
+# Source0-md5:	046d1764cd8f325109da9c80c993b2ef
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-logrotate.patch
@@ -21,7 +21,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	rpmbuild(macros) >= 1.159
-BuildRequires:	sgml-tools
+BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -84,7 +84,7 @@ install examples/* $RPM_BUILD_ROOT/srv/httpd/cgi-bin/
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
-install contrib/redhat/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install contrib/rpm/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
@@ -137,7 +137,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README ChangeLog docs/*.html docs/*.png
+%doc README CHANGES docs/*.html docs/*.png
 %attr(750,root,root) %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
