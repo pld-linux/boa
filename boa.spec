@@ -19,6 +19,7 @@ BuildRequires:	autoconf
 BuildRequires:	flex
 BuildRequires:	sgml-tools
 PreReq:		rc-scripts
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
@@ -133,13 +134,14 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README ChangeLog docs/*.html docs/*.png
-%attr(750, root,root) %dir %{_sysconfdir}
-%attr(640, root,root) %config(noreplace) %{_sysconfdir}/*
-%attr(640, root,root) %config(noreplace) /etc/logrotate.d/%{name}
-%attr(755, root,root) /home/services/httpd/html
-%attr(755, root,root) /home/services/httpd/cgi-bin
-%attr(750, root,root) %dir /var/log/httpd/
-%attr(640, root,root) %ghost /var/log/httpd/*
-%attr(755, root,root) %{_sbindir}/*
-%attr(754, root,root) /etc/rc.d/init.d/%{name}
+%attr(750,root,root) %dir %{_sysconfdir}
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
+%attr(640,root,root) %config(noreplace) /etc/logrotate.d/%{name}
+%dir /home/services/httpd
+%attr(755,root,root) /home/services/httpd/html
+%attr(755,root,root) /home/services/httpd/cgi-bin
+%attr(750,root,root) %dir /var/log/httpd/
+%attr(640,root,root) %ghost /var/log/httpd/*
+%attr(755,root,root) %{_sbindir}/*
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
