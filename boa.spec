@@ -1,6 +1,6 @@
 #
 # Conditional build:
-# _without_ipv6	- IPv4-only version (doesn't require IPv6 in kernel)
+%bcond_without 	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
 #
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
@@ -58,7 +58,7 @@ cp examples/boa.conf .
 %patch1	-p0
 
 %build
-CFLAGS="%{rpmcflags} %{!?_without_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
+CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
 %{__autoconf}
 %configure
 %{__make}
