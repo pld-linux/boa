@@ -73,47 +73,18 @@ gzip -9nf README
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid http`" ]; then
-        if [ "`getgid http`" != "51" ]; then
-                echo "Warning:group http haven't gid=51. Correct this before install boa" 1>&2
-                exit 1
-        fi
-else
-        /usr/sbin/groupadd -g 51 -r -f http
-fi
-if [ -n "`id -u http 2>/dev/null`" ]; then
-        if [ "`id -u http`" != "51" ]; then
-                echo "Warning:user http haven't uid=51. Correct this before install boa" 1>&2
-                exit 1
-        fi
-else
-        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
-fi
-
+GROUP=http; GID=51; %groupadd
+USER=http; UID=51; HOMEDIR=/home/httpd; COMMENT="HTTP User"; %useradd
 
 %postun
-if [ "$1" = "0" ]; then
-	%{_sbindir}/userdel http > /dev/null 2>&1
-	%{_sbindir}/groupdel http > /dev/null 2>&1
-fi
+USER=http; %userdel
+GROUP=http; %groupdel
 
 %post
-/sbin/chkconfig --add %{name}
-
-if [ -f /var/lock/subsys/httpd ]; then
-        /etc/rc.d/init.d/httpd restart 1>&2
-else
-        echo "Run \"/etc/rc.d/init.d/boa start\" to start boa http daemon."
-fi
-
+DESC="boa http daemon"; %chkconfig_post
 
 %preun
-if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/boa ]; then
-                /etc/rc.d/init.d/boa stop 1>&2
-        fi
-        /sbin/chkconfig --del boa
-fi
+%chkconfig_preun
 
 %files
 %defattr(644,root,root,755)
