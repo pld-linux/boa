@@ -63,7 +63,7 @@ diff -bruN boa-0.94.8.2/src/Makefile.in boa-0.94.8.2.pld/src/Makefile.in
  
  LDFLAGS = @LIBS@ -g 
 -CFLAGS = -O -Wall -g
-+CFLAGS = $(RPM_OPT_FLAGS) -DINET6
++CFLAGS = @CFLAGS@
  
  # Change these if necessary
  
