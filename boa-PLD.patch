@@ -1,0 +1,84 @@
+diff -ur boa-0.93.16.1/examples/boa.conf boa-0.93.16.1.new/examples/boa.conf
+--- boa-0.93.16.1/examples/boa.conf	Sun Mar 28 15:09:59 1999
++++ boa-0.93.16.1.new/examples/boa.conf	Fri Jul 16 17:06:39 1999
+@@ -24,8 +24,8 @@
+ #  User: The name or UID the server should run as.
+ # Group: The group name or GID the server should run as.
+ 
+-User nobody
+-Group nogroup
++User http
++Group http
+ 
+ # ServerAdmin: The email address where server problems should be sent.
+ # Note: this is not currently used.
+@@ -72,7 +72,7 @@
+ 
+ # DocumentRoot: The root directory of the HTML documents.
+ 
+-DocumentRoot /var/www
++DocumentRoot /home/boa/htdocs
+ 
+ # ChRoot: Boa root '/' directory. This is useful to improve security of
+ # your system. Don't forget that ALL DIRECTORIES used by boa except logs
+@@ -93,12 +93,12 @@
+ 
+ DirectoryIndex index.html
+ 
+-DirectoryMaker /usr/local/sbin/boa_indexer
++DirectoryMaker /usr/sbin/boa_indexer
+ 
+ # LocalCodepage: Local codepage. This is send to client in 'Content-Type:'
+ # header by default.
+ 
+-#LocalCodepage iso-8859-1
++#LocalCodepage iso-8859-2
+ 
+ # Codepage: Load codepage conversion table from file. This table will be used
+ # on-the-fly conversion.
+@@ -161,7 +161,7 @@
+ # ScriptAlias: Maps a virtual path to a directory for serving scripts
+ # Example: ScriptAlias /htbin/ /www/htbin/
+ 
+-ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
++ScriptAlias /cgi-bin/ /home/boa/cgi-bin/
+ 
+ # VirtualHost: Maps a virtual host to a directory.
+ # Example: VirtualHost cz.boa.org /html/htdocs/boa/
+diff -ur boa-0.93.16.1/src/defines.h boa-0.93.16.1.new/src/defines.h
+--- boa-0.93.16.1/src/defines.h	Tue Jan  5 23:19:54 1999
++++ boa-0.93.16.1.new/src/defines.h	Fri Jul 16 17:07:27 1999
+@@ -26,7 +26,7 @@
+ /***** Change this, or use -c on the command line to specify it *****/
+ 
+ #ifndef SERVER_ROOT
+-#define SERVER_ROOT "/etc/boa"
++#define SERVER_ROOT "/home/boa"
+ #endif
+ 
+ /***** Logs *****************************************************************/
+@@ -41,7 +41,7 @@
+ #define USE_NLS							 		1
+ #define USE_NLS_REFERER_REDIR		1
+ #define USE_CHARSET_HEADER   		1
+-#define DEFAULT_CHARSET      "iso-8859-1"
++#define DEFAULT_CHARSET      "iso-8859-2"
+ 
+ /****** Authorization ******************************************************/
+ 
+diff -ur boa-0.93.16.1/util/resolver.pl boa-0.93.16.1.new/util/resolver.pl
+--- boa-0.93.16.1/util/resolver.pl	Sun Dec 20 00:46:33 1998
++++ boa-0.93.16.1.new/util/resolver.pl	Fri Jul 16 17:08:09 1999
+@@ -1,10 +1,10 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ 
+ # IP address resolver for Boa
+ 
+ # If you want an "in place" change to the log file,
+ # change the first line to
+-#!/usr/local/bin/perl -i.bak
++#!/usr/bin/perl -i.bak
+ # Otherwise, send the output of this program wherever you want:
+ #  resolver.pl access_log >access_log_resolved
+ 
