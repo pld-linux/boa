@@ -81,10 +81,10 @@ USER=http; %userdel
 GROUP=http; %groupdel
 
 %post
-DESC="boa http daemon"; %chkconfig_post
+DESC="boa http daemon"; %chkconfig_add
 
 %preun
-%chkconfig_preun
+%chkconfig_del
 
 %files
 %defattr(644,root,root,755)
