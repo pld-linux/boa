@@ -1,47 +1,83 @@
 #!/bin/sh
 #
-# Startup script for the Boa Web Server
+# boa		Boa Web Server
 #
-# chkconfig: 345 85 15
-# description: Boa is a World Wide Web server.  It is used to serve \
-# HTML files and CGI.
-# processname: boa
-# config: /etc/httpd/boa.conf
+# chkconfig:	345 85 15
+# description:	Boa is a World Wide Web server.  It is used to serve \
+#		HTML files and CGI.
+# processname:	boa
+# config:	/etc/httpd/boa.conf
 
-# Source function library.
+
+# Source function library
 . /etc/rc.d/init.d/functions
 
-# Check that networking is up.
-[ "${NETWORKING}" == "no" ] && exit0
+# Get network config
+. /etc/sysconfig/network
 
-# Try set service nice level
-if [ -f /etc/sysconfig/services/boa ]; then
-    . /etc/sysconfig/services/boa
-fi    
+# Get service config - may override defaults
+[ -f /etc/sysconfig/boa ] && . /etc/sysconfig/boa
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+	msg_Network_Down "Boa httpd"
+	exit 1
+fi
+
 
 # See how we were called.
 case "$1" in
   start)
-	show "Starting boa"
-	daemon boa
-	touch /var/lock/subsys/httpd
-	;;
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/boa ]; then
+		msg_starting "Boa httpd"
+		daemon boa
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/boa
+	else
+		msg_Already_Running "Boa httpd"
+		exit 1
+	fi
+        ;;
   stop)
-	show "Shutting down boa"
-	killproc boa
-	rm -f /var/lock/subsys/boa
+        # Stop daemons.
+	if [ -f /var/lock/subsys/boa ]; then
+		msg_stopping "Boa httpd"
+		killproc boa
+		rm -f /var/lock/subsys/boa >/dev/null 2>&1
+	else
+		msg_Not_Running "Boa httpd"
+		exit 1
+	fi	
+        ;;
+  restart)
+        $0 stop
+	$0 start
+        ;;
+  reload)
+	if [ -f /var/lock/subsys/boa ]; then
+		msg_show "Boa httpd"
+		msg_reload
+		busy
+		killproc boa -HUP
+		deltext
+		ok		
+	else
+		msg_Not_Running "Boa httpd"
+		exit 1
+	fi
+	;;
+  force-reload)
+	$0 reload
+	exit $?
 	;;
   status)
 	status boa
-	;;
-  restart)
-	$0 stop
-	$0 start
-	;;
+	exit $?
+        ;;
   *)
-	echo "Usage: $0 {start|stop|restart|status}"
-	exit 1
-	;;
+	msg_Usage "$0 {start|stop|status|restart|reload|force-reload}"
+        exit 1
 esac
 
-exit 0
+exit $RETVAL
