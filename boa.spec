@@ -47,7 +47,3 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755, http, www) /home/httpd/util
 %attr(755, http, www) /home/httpd/html
 %attr(750, http, www) /var/log/httpd/
-
-%changelog
-* Fri Sep 25 1998 Wojciech "Sas" Ciêciwa <alpha@zarz.agh.edu.pl>
-- building RPM.
