@@ -55,7 +55,7 @@ systemowych.
 %build
 cd src
 CFLAGS="%{rpmcflags} %{!?_without_ipv6:-DINET6}"
-autoconf
+%{__autoconf}
 %configure
 %{__make}
 cd ../docs
