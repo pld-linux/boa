@@ -18,6 +18,7 @@ Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-logrotate.patch
 URL:		http://www.boa.org/
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	sgml-tools
 PreReq:		rc-scripts
@@ -30,11 +31,11 @@ Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Provides:	httpd
 Provides:	webserver
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
 Obsoletes:	httpd
 Obsoletes:	thttpd
 Obsoletes:	webserver
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/httpd
 
