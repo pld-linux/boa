@@ -50,7 +50,7 @@ diff -ur boa-0.93.16.1/examples/boa.conf boa-0.93.16.1.new/examples/boa.conf
  # DocumentRoot: The root directory of the HTML documents.
  
 -DocumentRoot /var/www
-+DocumentRoot /home/boa/htdocs
++DocumentRoot /home/httpd/htdocs
  
  # ChRoot: Boa root '/' directory. This is useful to improve security of
  # your system. Don't forget that ALL DIRECTORIES used by boa except logs
@@ -74,7 +74,7 @@ diff -ur boa-0.93.16.1/examples/boa.conf boa-0.93.16.1.new/examples/boa.conf
  # Example: ScriptAlias /htbin/ /www/htbin/
  
 -ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-+ScriptAlias /cgi-bin/ /home/boa/cgi-bin/
++ScriptAlias /cgi-bin/ /home/httpd/cgi-bin/
  
  # VirtualHost: Maps a virtual host to a directory.
  # Example: VirtualHost cz.boa.org /html/htdocs/boa/
@@ -86,7 +86,7 @@ diff -ur boa-0.93.16.1/src/defines.h boa-0.93.16.1.new/src/defines.h
  
  #ifndef SERVER_ROOT
 -#define SERVER_ROOT "/etc/boa"
-+#define SERVER_ROOT "/home/boa"
++#define SERVER_ROOT "/home/httpd"
  #endif
  
  /***** Logs *****************************************************************/
