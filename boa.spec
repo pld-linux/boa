@@ -7,7 +7,7 @@ Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
 %define	_rc	rc17
-Release:	0.%{_rc}.3
+Release:	0.%{_rc}.4
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
