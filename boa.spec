@@ -1,15 +1,15 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.93.16.1
+Version:	0.94.6
 Release:	1
 Copyright:	GPL
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
-Source0:	http://www.cz.boa.org/updates/%{name}-%{version}.tar.gz
+Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
 Source1:	boa.init
-Patch0:		boa-PLD.patch
-Patch1:		boa-0.93.16.1-ipv6-fix.patch
+#Patch0:		boa-PLD.patch
+#Patch1:		boa-0.93.16.1-ipv6-fix.patch
 Provides:       httpd                                                           
 Provides:       webserver                                                       
 Prereq:		sh-utils
@@ -37,14 +37,14 @@ dzia³ania oraz zmniejsza zu¿ycie zasobów systemowych.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1
+#%patch1 -p1
 
 %build
 cd src
 %configure
 make
-(cd ../util; make )
+#(cd ../util; make )
 (cd ../docs; make boa.html )
 
 %install
