@@ -6,7 +6,7 @@ Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.12
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
@@ -20,7 +20,6 @@ BuildRequires:	flex
 BuildRequires:	sgml-tools
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
@@ -52,7 +51,7 @@ systemowych.
 %prep
 %setup -q
 %patch0 -p1
-%patch1	-p1
+%patch1	-p0
 
 %build
 cd src
@@ -91,15 +90,6 @@ gzip -9nf README ChangeLog
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid http`" ]; then
-        if [ "`getgid http`" != "51" ]; then
-                echo "Error: group http doesn't have gid=51. Correct this before installing boa." 1>&2
-                exit 1
-        fi
-else
-	echo "Creating group http GID=51"
-        /usr/sbin/groupadd -g 51 -r -f http
-fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
         if [ "`id -u http`" != "51" ]; then
                 echo "Error: user http doesn't have uid=51. Correct this before installing boa." 1>&2
@@ -107,15 +97,13 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
         fi
 else
 	echo "Creating user http UID=51"
-        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" http 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing user http UID=51"
 	/usr/sbin/userdel http > /dev/null 2>&1
-	echo "Removing group http GID=51"
-	/usr/sbin/groupdel http > /dev/null 2>&1
 fi
 
 %post
@@ -137,13 +125,13 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc *.gz docs/*.html docs/*.png
-%attr(750, root,http) %dir %{_sysconfdir}
-%attr(640, root,http) %config(noreplace) %{_sysconfdir}/*
-%attr(640, root,http) %config(noreplace) /etc/logrotate.d/%{name}
-%attr(755, root,http) /home/httpd/html
-%attr(755, root,http) /home/httpd/cgi-bin
-%attr(750, root,http) %dir /var/log/httpd/
-%attr(640, root,http) %ghost /var/log/httpd/*
+%attr(750, root,root) %dir %{_sysconfdir}
+%attr(640, root,root) %config(noreplace) %{_sysconfdir}/*
+%attr(640, root,root) %config(noreplace) /etc/logrotate.d/%{name}
+%attr(755, root,root) /home/httpd/html
+%attr(755, root,root) /home/httpd/cgi-bin
+%attr(750, root,root) %dir /var/log/httpd/
+%attr(640, root,root) %ghost /var/log/httpd/*
 %attr(755, root,root) %{_sbindir}/*
 %attr(754, root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
