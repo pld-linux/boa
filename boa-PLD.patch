@@ -67,6 +67,18 @@ diff -bruN boa-0.94.8.2/src/Makefile.in boa-0.94.8.2.pld/src/Makefile.in
  
  # Change these if necessary
  
+diff -bruN boa-0.94.8.2/src/compat.h boa-0.94.8.2.pld/src/compat.h
+--- boa-0.94.8.2/src/compat.h	Mon Apr 10 21:45:57 2000
++++ boa-0.94.8.2.pld/src/compat.h	Sun Sep 10 05:02:16 2000
+@@ -71,7 +71,7 @@
+ 
+ #ifdef INET6
+ #define SOCKADDR sockaddr_storage
+-#define S_FAMILY __s_family
++#define S_FAMILY __ss_family
+ #define SERVER_AF AF_INET6
+ #else
+ #define SOCKADDR sockaddr_in
 diff -bruN boa-0.94.8.2/src/defines.h boa-0.94.8.2.pld/src/defines.h
 --- boa-0.94.8.2/src/defines.h	Mon May  1 22:33:25 2000
 +++ boa-0.94.8.2.pld/src/defines.h	Sun Sep 10 04:38:02 2000
