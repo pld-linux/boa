@@ -5,13 +5,14 @@
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
-Version:	0.94.13
-Release:	1
+Version:	0.94.14
+%define	_rc	rc17
+Release:	0.%{_rc}.1
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
-# Source0-md5:	c8d6f46f9aa60909f171529068813fe0
+Source0:	http://www.boa.org/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	d668ef85b3d2df3dc9832555fdce8b70
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-logrotate.patch
@@ -51,18 +52,17 @@ znacznie zwiêksza szybko¶æ dzia³ania oraz zmniejsza zu¿ycie zasobów
 systemowych.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n %{name}-%{version}%{_rc}
+cp examples/boa.conf .
+%patch0 -p0
 %patch1	-p0
 
 %build
-cd src
-CFLAGS="%{rpmcflags} %{!?_without_ipv6:-DINET6}"
+CFLAGS="%{rpmcflags} %{!?_without_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
 %{__autoconf}
 %configure
 %{__make}
-cd ../docs
-%{__make} boa.html
+%{__make} -C docs boa.html
 
 %install
 rm -rf $RPM_BUILD_ROOT
