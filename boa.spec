@@ -58,6 +58,7 @@ cp examples/boa.conf .
 %patch1	-p0
 
 %build
+cp -f /usr/share/automake/config.sub .
 CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
 %{__autoconf}
 %configure
