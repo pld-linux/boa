@@ -1,39 +1,5 @@
---- ./src/compat.h.orig	Mon Jul 30 13:44:30 2001
-+++ ./src/compat.h	Mon Jul 30 14:16:47 2001
-@@ -71,7 +71,7 @@
- 
- #ifdef INET6
- #define SOCKADDR sockaddr_storage
--#define S_FAMILY __s_family
-+#define S_FAMILY ss_family
- #define SERVER_AF AF_INET6
- #else
- #define SOCKADDR sockaddr_in
---- ./src/defines.h.orig	Mon Jul 30 13:45:47 2001
-+++ ./src/defines.h	Mon Jul 30 13:46:46 2001
-@@ -27,7 +27,7 @@
- /***** Change this, or use -c on the command line to specify it *****/
- 
- #ifndef SERVER_ROOT
--#define SERVER_ROOT "/etc/boa"
-+#define SERVER_ROOT "/etc/httpd"
- #endif
- 
- /***** Various stuff that you may want to tweak, but probably shouldn't *****/
---- ./src/Makefile.in.orig	Mon Jul 30 13:52:33 2001
-+++ ./src/Makefile.in	Mon Jul 30 14:11:26 2001
-@@ -14,7 +14,8 @@
- 
- LDFLAGS = @LDFLAGS@
- LIBS = @LIBS@
--CFLAGS = @CFLAGS@ -I.
-+#CFLAGS = @CFLAGS@ -I.
-+CFLAGS = @CFLAGS@
- 
- # Change these if necessary
- 
---- ./boa.conf.orig	Mon Jul 30 13:49:43 2001
-+++ ./boa.conf	Mon Jul 30 13:52:00 2001
+--- examples/boa.conf	Sun Feb  2 05:02:22 2003
++++ boa.conf	Mon Jul 14 17:50:16 2003
 @@ -45,8 +45,8 @@
  #  User: The name or UID the server should run as.
  # Group: The group name or GID the server should run as.
@@ -45,25 +11,7 @@
  
  # ServerAdmin: The email address where server problems should be sent.
  # Note: this is not currently used, except as an environment variable
-@@ -59,7 +59,7 @@
- # Set to /dev/null if you don't want errors logged.
- # If unset, defaults to /dev/stderr
- 
--ErrorLog /var/log/boa/error_log
-+ErrorLog /var/log/httpd/error_log
- # Please NOTE: Sending the logs to a pipe ('|'), as shown below,
- #  is somewhat experimental and might fail under heavy load.
- # "Usual libc implementations of printf will stall the whole
-@@ -71,7 +71,7 @@
- # Comment out or set to /dev/null (less effective) to disable 
- # Access logging.
- 
--AccessLog /var/log/boa/access_log
-+AccessLog /var/log/httpd/access_log
- # Please NOTE: Sending the logs to a pipe ('|'), as shown below,
- #  is somewhat experimental and might fail under heavy load.
- # "Usual libc implementations of printf will stall the whole
-@@ -108,7 +108,7 @@
+@@ -155,7 +155,7 @@
  # DocumentRoot: The root directory of the HTML documents.
  # Comment out to disable server non user files.
  
@@ -71,8 +19,8 @@
 +DocumentRoot /home/services/httpd/html
  
  # UserDir: The name of the directory which is appended onto a user's home
- # directory if a ~user request is recieved.
-@@ -127,7 +127,7 @@
+ # directory if a ~user request is received.
+@@ -174,7 +174,7 @@
  # DirectoryIndex are commented out, accessing a directory will give
  # an error (though accessing files in the directory are still ok).
  
@@ -81,7 +29,13 @@
  
  # DirectoryCache: If DirectoryIndex doesn't exist, and DirectoryMaker
  # has been commented out, the the on-the-fly indexing of Boa can be used
-@@ -182,5 +182,5 @@
+@@ -232,10 +232,10 @@
+ # Aliases: Aliases one path to another.
+ # Example: Alias /path1/bar /path2/foo
+ 
+-Alias /doc /usr/doc
++Alias /doc /usr/share/doc
+ 
  # ScriptAlias: Maps a virtual path to a directory for serving scripts
  # Example: ScriptAlias /htbin/ /www/htbin/
  
