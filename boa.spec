@@ -6,9 +6,10 @@ Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
+Group(de):	Netzwerkwesen/Server
 Source0:	http://www.boa.org/%{name}-%{version}.tar.gz
-Source1:	boa.init
-Patch0:		boa-PLD.patch
+Source1:	%{name}.init
+Patch0:		%{name}-PLD.patch
 Provides:	httpd                                                           
 Provides:	webserver                                                       
 Prereq:		sh-utils
