@@ -140,7 +140,7 @@ fi
 %doc README ChangeLog docs/*.html docs/*.png
 %attr(750,root,root) %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
-%attr(640,root,root) %config(noreplace) /etc/logrotate.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
 %dir /srv/httpd
 %attr(755,root,root) /srv/httpd/html
 %attr(755,root,root) /srv/httpd/cgi-bin
