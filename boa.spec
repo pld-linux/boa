@@ -116,7 +116,7 @@ fi
 if [ -f /var/lock/subsys/boa ]; then
 	/etc/rc.d/init.d/boa restart 1>&2
 else
-	echo "Run \"/etc/rc.d/init.d/boa start\" to start boa http daemon."
+	echo "Run \"/etc/rc.d/init.d/boa start\" to start boa HTTP daemon."
 fi
 
 %preun
