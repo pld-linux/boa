@@ -20,6 +20,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	sed >= 4.0
 BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
@@ -54,6 +55,7 @@ cp examples/boa.conf .
 
 %build
 cp -f /usr/share/automake/config.sub .
+%{__sed} -i 's,},  olddir /var/log/archiv/boa\x0a},' contrib/rpm/boa.logrotate
 CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 %{__autoconf}
 %configure
