@@ -1,6 +1,6 @@
 diff -urN boa-0.93.16.1.orig/examples/boa.conf boa-0.93.16.1/examples/boa.conf
---- boa-0.93.16.1.orig/examples/boa.conf	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/examples/boa.conf	Sat Aug 14 17:10:04 1999
+--- boa-0.93.16.1.orig/examples/boa.conf	Sat Aug 14 18:48:40 1999
++++ boa-0.93.16.1/examples/boa.conf	Sat Aug 14 18:51:40 1999
 @@ -24,8 +24,8 @@
  #  User: The name or UID the server should run as.
  # Group: The group name or GID the server should run as.
@@ -50,7 +50,7 @@ diff -urN boa-0.93.16.1.orig/examples/boa.conf boa-0.93.16.1/examples/boa.conf
  # DocumentRoot: The root directory of the HTML documents.
  
 -DocumentRoot /var/www
-+DocumentRoot /home/httpd/htdocs
++DocumentRoot /home/httpd/html
  
  # ChRoot: Boa root '/' directory. This is useful to improve security of
  # your system. Don't forget that ALL DIRECTORIES used by boa except logs
@@ -79,8 +79,8 @@ diff -urN boa-0.93.16.1.orig/examples/boa.conf boa-0.93.16.1/examples/boa.conf
  # VirtualHost: Maps a virtual host to a directory.
  # Example: VirtualHost cz.boa.org /html/htdocs/boa/
 diff -urN boa-0.93.16.1.orig/src/Makefile.in boa-0.93.16.1/src/Makefile.in
---- boa-0.93.16.1.orig/src/Makefile.in	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/src/Makefile.in	Sat Aug 14 17:11:25 1999
+--- boa-0.93.16.1.orig/src/Makefile.in	Sat Aug 14 18:48:40 1999
++++ boa-0.93.16.1/src/Makefile.in	Sat Aug 14 18:48:45 1999
 @@ -9,16 +9,13 @@
  
  # Add -DNO_DAEMON if you do not want the server to fork upon launch
@@ -101,14 +101,14 @@ diff -urN boa-0.93.16.1.orig/src/Makefile.in boa-0.93.16.1/src/Makefile.in
  # Change these if necessary
  
 diff -urN boa-0.93.16.1.orig/src/defines.h boa-0.93.16.1/src/defines.h
---- boa-0.93.16.1.orig/src/defines.h	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/src/defines.h	Sat Aug 14 17:10:04 1999
+--- boa-0.93.16.1.orig/src/defines.h	Sat Aug 14 18:48:40 1999
++++ boa-0.93.16.1/src/defines.h	Sat Aug 14 18:48:45 1999
 @@ -26,7 +26,7 @@
  /***** Change this, or use -c on the command line to specify it *****/
  
  #ifndef SERVER_ROOT
 -#define SERVER_ROOT "/etc/boa"
-+#define SERVER_ROOT "/home/httpd"
++#define SERVER_ROOT "/etc/httpd"
  #endif
  
  /***** Logs *****************************************************************/
@@ -121,41 +121,9 @@ diff -urN boa-0.93.16.1.orig/src/defines.h boa-0.93.16.1/src/defines.h
  
  /****** Authorization ******************************************************/
  
-diff -urN boa-0.93.16.1.orig/src/request.c boa-0.93.16.1/src/request.c
---- boa-0.93.16.1.orig/src/request.c	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/src/request.c	Sat Aug 14 17:14:43 1999
-@@ -27,10 +27,6 @@
- #include <netinet/tcp.h>
- #include <netdb.h>
- 
--#ifdef INET6
--#include <support.h>
--#endif
--
- int sockbufsize = SOCKETBUF_SIZE;
- 
- extern int server_s;			/* boa socket */
-@@ -154,7 +150,7 @@
- 	/* for log file and possible use by CGI programs */
- #ifdef INET6
- 	if (getnameinfo((struct sockaddr *)&remote_addr, 
--									NRL_SA_LEN((struct sockaddr *)&remote_addr), 
-+									SA_LEN((struct sockaddr *)&remote_addr), 
- 									conn->remote_ip_addr, 20,
- 								 	NULL, 0, NI_NUMERICHOST)) {
- 			fprintf(stderr, "[IPv6] getnameinfo failed\n");
-@@ -181,7 +177,7 @@
-     if (getsockname(conn->fd, (struct sockaddr *) &salocal, &dummy) == -1)
- 									      die(SERVER_ERROR);
- 		if (getnameinfo((struct sockaddr *)&salocal,
--                  NRL_SA_LEN((struct sockaddr *)&salocal),
-+                  SA_LEN((struct sockaddr *)&salocal),
-                   host, 20,
-                   NULL, 0, NI_NUMERICHOST)) {
-       fprintf(stderr, "[IPv6] getnameinfo failed\n");
 diff -urN boa-0.93.16.1.orig/util/Makefile boa-0.93.16.1/util/Makefile
---- boa-0.93.16.1.orig/util/Makefile	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/util/Makefile	Sat Aug 14 17:10:04 1999
+--- boa-0.93.16.1.orig/util/Makefile	Sat Aug 14 18:48:40 1999
++++ boa-0.93.16.1/util/Makefile	Sat Aug 14 18:48:45 1999
 @@ -4,10 +4,10 @@
  	rm cpsel cp-test 
  
@@ -171,8 +139,8 @@ diff -urN boa-0.93.16.1.orig/util/Makefile boa-0.93.16.1/util/Makefile
 -	gcc -o boa_indexer index_dir.c
 +	gcc $(RPM_OPT_FLAGS) -o boa_indexer index_dir.c
 diff -urN boa-0.93.16.1.orig/util/resolver.pl boa-0.93.16.1/util/resolver.pl
---- boa-0.93.16.1.orig/util/resolver.pl	Sat Aug 14 17:10:00 1999
-+++ boa-0.93.16.1/util/resolver.pl	Sat Aug 14 17:10:04 1999
+--- boa-0.93.16.1.orig/util/resolver.pl	Sat Aug 14 18:48:40 1999
++++ boa-0.93.16.1/util/resolver.pl	Sat Aug 14 18:48:45 1999
 @@ -1,10 +1,10 @@
 -#!/usr/local/bin/perl
 +#!/usr/bin/perl

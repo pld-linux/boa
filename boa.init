@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Startup script for the Boa Web Server
+#
+# chkconfig: 345 85 15
+# description: Boa is a World Wide Web server.  It is used to serve \
+# HTML files and CGI.
+# processname: boa
+# config: /etc/httpd/boa.conf
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Check that networking is up.
+[ "${NETWORKING}" == "no" ] && exit0
+
+# Try set service nice level
+if [ -f /etc/sysconfig/services/boa ]; then
+    . /etc/sysconfig/services/boa
+fi    
+
+# See how we were called.
+case "$1" in
+  start)
+	show "Starting boa"
+	daemon boa
+	touch /var/lock/subsys/httpd
+	;;
+  stop)
+	show "Shutting down boa"
+	killproc boa
+	rm -f /var/lock/subsys/boa
+	;;
+  status)
+	status boa
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
+	;;
+esac
+
+exit 0
