@@ -34,10 +34,6 @@ Provides:	user(http)
 Provides:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# FIXME: Other location?  Should belong to httpd-common (or alike) package?
-# NOTE:  Not needed, as we shouldn't put anything there.
-#%define		_cgi_bin	/usr/lib/cgi-bin
-
 %description
 A high speed, lightweight web server (HTTP protocol). Based on direct
 use of the select(2) system call, it internally multiplexes all
@@ -72,7 +68,6 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
 	$RPM_BUILD_ROOT%{_mandir}/man8 \
 	$RPM_BUILD_ROOT/etc/logrotate.d \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-#	$RPM_BUILD_ROOT%{_cgi_bin}
 
 install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
 
@@ -134,8 +129,9 @@ fi
 
 %triggerpostun -- boa < 0.94.14-0.rc20.0
 if [ -f /etc/httpd/boa.conf.rpmsave ]; then
-	echo "warning: moving /etc/httpd/boa.conf.rpmsave to /etc/boa.conf"
+	echo "warning: installing /etc/boa.conf as /etc/boa.conf.rpmnew"
 	mv /etc/boa.conf /etc/boa.conf.rpmnew
+	echo "warning: moving /etc/httpd/boa.conf.rpmsave to /etc/boa.conf"
 	mv /etc/httpd/boa.conf.rpmsave /etc/boa.conf
 fi
 
@@ -144,7 +140,6 @@ fi
 %doc README CHANGES docs/*.html docs/*.png
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/boa.conf
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
-#%attr(755,root,root) %{_cgi_bin}
 %attr(750,root,root) %dir /var/log/%{name}/
 %attr(750,root,root) %dir /var/log/archiv/%{name}/
 %attr(640,root,root) %ghost /var/log/%{name}/*
