@@ -1,6 +1,6 @@
 diff -ur boa-0.93.16.1/examples/boa.conf boa-0.93.16.1.new/examples/boa.conf
 --- boa-0.93.16.1/examples/boa.conf	Sun Mar 28 15:09:59 1999
-+++ boa-0.93.16.1.new/examples/boa.conf	Fri Jul 16 17:06:39 1999
++++ boa-0.93.16.1.new/examples/boa.conf	Fri Jul 16 17:18:24 1999
 @@ -24,8 +24,8 @@
  #  User: The name or UID the server should run as.
  # Group: The group name or GID the server should run as.
@@ -12,6 +12,39 @@ diff -ur boa-0.93.16.1/examples/boa.conf boa-0.93.16.1.new/examples/boa.conf
  
  # ServerAdmin: The email address where server problems should be sent.
  # Note: this is not currently used.
+@@ -36,28 +36,28 @@
+ # with /, it is considered relative to the server root.
+ # Set to /dev/null if you don't want errors logged.
+ 
+-ErrorLog /var/log/boa/error_log
++ErrorLog /var/log/httpd/error_log
+ 
+ # AccessLog: The location of the access log file. If this does not
+ # start with /, it is considered relative to the server root.
+ # Comment out or set to /dev/null (less effective) to disable 
+ # Access logging.
+ 
+-AccessLog /var/log/boa/access_log
++AccessLog /var/log/httpd/access_log
+ 
+ # RefererLog: The location of the referer log file. If this does not
+ # start with /, it is considered relative to the server root.
+ # Comment out or set to /dev/null (less effective) to disable
+ # referer logging.
+ 
+-RefererLog /var/log/boa/referer_log
++RefererLog /var/log/httpd/referer_log
+ 
+ # AgentLog: The location of the agent log file. If this does not
+ # start with /, it is considered relative to the server root.
+ # Comment out or set to /dev/null (less effective) to disable
+ # User-Agent logging.
+ 
+-AgentLog /var/log/boa/agent_log
++AgentLog /var/log/httpd/agent_log
+ 
+ # VerboseCGILogs: this is just a logical switch.
+ # Comment out to disable.
 @@ -72,7 +72,7 @@
  
  # DocumentRoot: The root directory of the HTML documents.
