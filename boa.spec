@@ -7,7 +7,7 @@ Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
 %define	_rc	rc20
-Release:	0.%{_rc}.1
+Release:	0.%{_rc}.2
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
@@ -15,7 +15,6 @@ Source0:	http://www.boa.org/%{name}-%{version}%{_rc}.tar.gz
 # Source0-md5:	046d1764cd8f325109da9c80c993b2ef
 Source1:	%{name}.init
 Patch0:		%{name}-PLD.patch
-Patch1:		%{name}-logrotate.patch
 URL:		http://www.boa.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -31,16 +30,13 @@ Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Provides:	group(http)
-Provides:	httpd
 Provides:	user(http)
 Provides:	webserver
-Obsoletes:	apache
-Obsoletes:	httpd
-Obsoletes:	thttpd
-Obsoletes:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc/httpd
+# FIXME: Other location?  Should belong to httpd-common (or alike) package?
+# NOTE:  Not needed, as we shouldn't put anything there.
+#%define		_cgi_bin	/usr/lib/cgi-bin
 
 %description
 A high speed, lightweight web server (HTTP protocol). Based on direct
@@ -59,11 +55,10 @@ systemowych.
 %setup -q -n %{name}-%{version}%{_rc}
 cp examples/boa.conf .
 %patch0 -p0
-%patch1	-p0
 
 %build
 cp -f /usr/share/automake/config.sub .
-CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
+CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 %{__autoconf}
 %configure
 %{__make}
@@ -72,15 +67,17 @@ CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"/etc/httpd\"'"
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
-	$RPM_BUILD_ROOT/var/log/httpd \
-	$RPM_BUILD_ROOT/srv/httpd/{cgi-bin,html} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/conf,%{_mandir}/man8} \
-	$RPM_BUILD_ROOT/etc/logrotate.d
+	$RPM_BUILD_ROOT/var/log/boa \
+	$RPM_BUILD_ROOT%{_sbindir} \
+	$RPM_BUILD_ROOT%{_mandir}/man8 \
+	$RPM_BUILD_ROOT/etc/logrotate.d \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+#	$RPM_BUILD_ROOT%{_cgi_bin}
 
 install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
 
-install src/*.pl $RPM_BUILD_ROOT/srv/httpd/cgi-bin/
-install examples/* $RPM_BUILD_ROOT/srv/httpd/cgi-bin/
+install src/*.pl examples/*.pl examples/*.cgi \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 install	%{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
@@ -88,7 +85,7 @@ install contrib/rpm/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
-touch $RPM_BUILD_ROOT/var/log/httpd/{access_log,agent_log,error_log,referer_log}
+touch $RPM_BUILD_ROOT/var/log/boa/{access_log,agent_log,error_log,referer_log}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -110,7 +107,7 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
 	fi
 else
 	echo "Creating user http UID=51"
-	/usr/sbin/useradd -u 51 -r -d /srv/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+	/usr/sbin/useradd -u 51 -r -d /usr/share/empty -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
 %postun
@@ -138,14 +135,12 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README CHANGES docs/*.html docs/*.png
-%attr(750,root,root) %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
-%dir /srv/httpd
-%attr(755,root,root) /srv/httpd/html
-%attr(755,root,root) /srv/httpd/cgi-bin
-%attr(750,root,root) %dir /var/log/httpd/
-%attr(640,root,root) %ghost /var/log/httpd/*
+#%attr(755,root,root) %{_cgi_bin}
+%attr(750,root,root) %dir /var/log/%{name}/
+%attr(640,root,root) %ghost /var/log/%{name}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
+%{_examplesdir}/%{name}-%{version}
