@@ -44,7 +44,7 @@ systemowych.
 
 %build
 cd src
-CFLAGS="%{?debug:-O -g}%{!?debug:$RPM_OPT_FLAGS} -DINET6"
+CFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -DINET6"
 %configure
 %{__make}
 (cd ../docs; make boa.html )
