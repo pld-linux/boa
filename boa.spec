@@ -40,7 +40,7 @@ install util/* $RPM_BUILD_ROOT/home/boa/util/
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(644, root, root, 755)
+%defattr(644,root,root,755)
 %doc README docs
 %attr(750, http, www) %dir /etc/httpd/conf
 %attr(750, http, www) %config /etc/httpd/conf/*
