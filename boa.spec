@@ -18,6 +18,7 @@ Prereq:		%{_sbindir}/groupdel
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/userdel
 BuildRequires:	flex
+BuildRequires:	sgml-tools
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	apache
