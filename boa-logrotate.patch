@@ -1,8 +1,0 @@
---- contrib/rpm/boa.logrotate	Wed Jul  3 18:56:22 2002
-+++ contrib/rpm/boa.logrotate	Wed Jul  3 18:56:29 2002
-@@ -1,4 +1,4 @@
--/var/log/boa/*_log {
-+/var/log/httpd/*_log {
-   weekly
-   compress
-   copytruncate

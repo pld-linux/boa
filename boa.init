@@ -6,7 +6,7 @@
 # description:	Boa is a World Wide Web server.  It is used to serve \
 #		HTML files and CGI.
 # processname:	boa
-# config:	/etc/httpd/boa.conf
+# config:	/etc/boa.conf
 
 
 # Source function library
