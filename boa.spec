@@ -7,7 +7,7 @@ Copyright:   GPL
 Group:       Networking/Daemons
 Source:      %{name}-%{version}.tar.gz
 Patch:       PLD-boa.diff
-Buildroot:   /tmp/%{name}-%{version}-root
+BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
 A high speed, lightweight web server (HTTP protocol).
