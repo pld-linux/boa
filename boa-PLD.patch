@@ -58,11 +58,12 @@ diff -bruN boa-0.94.8.2/boa.conf boa-0.94.8.2.pld/boa.conf
 diff -bruN boa-0.94.8.2/src/Makefile.in boa-0.94.8.2.pld/src/Makefile.in
 --- boa-0.94.8.2/src/Makefile.in	Sat Feb 12 22:52:45 2000
 +++ boa-0.94.8.2.pld/src/Makefile.in	Sun Sep 10 04:37:16 2000
-@@ -13,7 +13,7 @@
+@@ -12,7 +12,7 @@
  # Add -pg to CFLAGS and LDFLAGS to get profiling output with gcc/gprof
  
- LDFLAGS = @LIBS@ -g 
+-LDFLAGS = @LIBS@ -g 
 -CFLAGS = -O -Wall -g
++LDFLAGS = @LDFLAGS@
 +CFLAGS = @CFLAGS@
  
  # Change these if necessary
