@@ -1,12 +1,12 @@
-Summary:     Boa high speed HTTP server
-Summary(pl): Boa - szyki serwer HTTP
-Name:        boa
-Version:     0.92
-Release:     1
-Copyright:   GPL
-Group:       Networking/Daemons
-Source:      %{name}-%{version}.tar.gz
-Patch:       PLD-boa.diff
+Summary:	Boa high speed HTTP server
+Summary(pl):	Boa - szybki serwer HTTP
+Name:		boa
+Version:	0.93.16.1
+Release:	1
+Copyright:	GPL
+Group:		Networking/Daemons
+Source:		http://www.cz.boa.org/updates/%{name}-%{version}.tar.gz
+#Patch:		PLD-boa.diff
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
@@ -21,10 +21,11 @@ Nie korzystaj±cy z funkcji fork().
 
 %prep
 %setup -q
-%patch 
+#%patch -p0
 
 %build
 cd src
+%configure
 make
 
 %install
