@@ -1,0 +1,3 @@
+- updated to 0.94.8.3,
+- spec now is %{debug} ready,
+- use new rpm automation suit.
