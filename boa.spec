@@ -19,7 +19,7 @@ URL:		http://www.boa.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 BuildRequires:	flex
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
 BuildRequires:	texinfo
 PreReq:		rc-scripts
@@ -88,24 +88,8 @@ touch $RPM_BUILD_ROOT/var/log/boa/{access_log,agent_log,error_log,referer_log}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid http`" ]; then
-	if [ "`getgid http`" != "51" ]; then
-		echo "Error: group http doesn't have gid=51. Correct this before installing boa." 1>&2
-		exit 1
-	fi
-else
-	echo "Creating group http GID=51"
-	/usr/sbin/groupadd -g 51 -r -f http
-fi
-if [ -n "`id -u http 2>/dev/null`" ]; then
-	if [ "`id -u http`" != "51" ]; then
-		echo "Error: user http doesn't have uid=51. Correct this before installing boa." 1>&2
-		exit 1
-	fi
-else
-	echo "Creating user http UID=51"
-	/usr/sbin/useradd -u 51 -r -d /usr/share/empty -s /bin/false -c "HTTP User" -g http http 1>&2
-fi
+%groupadd -g 51 -r -f http
+%useradd -u 51 -r -d /usr/share/empty -s /bin/false -c "HTTP User" -g http http
 
 %postun
 if [ "$1" = "0" ]; then
