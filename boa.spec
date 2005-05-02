@@ -125,7 +125,7 @@ fi
 %defattr(644,root,root,755)
 %doc CHANGES README docs/*.html docs/*.png
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/boa.conf
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(750,root,root) %dir /var/log/%{name}/
 %attr(750,root,root) %dir /var/log/archiv/%{name}/
 %attr(640,root,root) %ghost /var/log/%{name}/*
