@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without 	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
+%bcond_without	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
 #
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
