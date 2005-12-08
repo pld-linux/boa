@@ -50,7 +50,7 @@ case "$1" in
 		rm -f /var/lock/subsys/boa >/dev/null 2>&1
 	else
 		msg_not_running "Boa httpd"
-	fi	
+	fi
 	;;
   restart)
 	$0 stop
