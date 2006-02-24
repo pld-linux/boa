@@ -2,11 +2,11 @@
 # Conditional build:
 %bcond_without	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
 #
+%define	_rc	rc21
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
-%define	_rc	rc21
 Release:	0.%{_rc}.1
 Epoch:		1
 License:	GPL v2
@@ -19,17 +19,17 @@ URL:		http://www.boa.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 BuildRequires:	flex
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	texinfo
-PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 Provides:	group(http)
 Provides:	user(http)
 Provides:	webserver
@@ -64,14 +64,14 @@ CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/ \
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
 	$RPM_BUILD_ROOT/var/log/{,archiv/}boa \
 	$RPM_BUILD_ROOT%{_sbindir} \
 	$RPM_BUILD_ROOT%{_mandir}/man8 \
 	$RPM_BUILD_ROOT/etc/logrotate.d \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}/
+install src/{boa,boa_indexer} $RPM_BUILD_ROOT%{_sbindir}
 
 install examples/*.pl examples/*.cgi \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
@@ -80,7 +80,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install boa.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 install contrib/rpm/boa.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
-install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8/
+install docs/boa.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 touch $RPM_BUILD_ROOT/var/log/boa/{access_log,agent_log,error_log,referer_log}
 
@@ -99,17 +99,11 @@ fi
 
 %post
 /sbin/chkconfig --add boa
-if [ -f /var/lock/subsys/boa ]; then
-	/etc/rc.d/init.d/boa restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/boa start\" to start boa HTTP daemon."
-fi
+%service boa restart "boa HTTP daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/boa ]; then
-		/etc/rc.d/init.d/boa stop 1>&2
-	fi
+	%service boa stop
 	/sbin/chkconfig --del boa
 fi
 
