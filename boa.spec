@@ -2,12 +2,13 @@
 # Conditional build:
 %bcond_without	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
 #
-%define	_rc	rc21
+%define	_rc		rc21
+%define	_rel	2
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
-Release:	0.%{_rc}.1
+Release:	0.%{_rc}.%{_rel}
 Epoch:		1
 License:	GPL v2
 Group:		Networking/Daemons
