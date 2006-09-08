@@ -3,7 +3,7 @@
 %bcond_without	ipv6	# IPv4-only version (doesn't require IPv6 in kernel)
 #
 %define	_rc		rc21
-%define	_rel	2
+%define	_rel	3
 Summary:	Boa high speed HTTP server
 Summary(pl):	Boa - szybki serwer HTTP
 Name:		boa
