@@ -5,7 +5,7 @@
 %define	_rc		rc21
 %define	_rel	3
 Summary:	Boa high speed HTTP server
-Summary(pl):	Boa - szybki serwer HTTP
+Summary(pl.UTF-8):   Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
 Release:	0.%{_rc}.%{_rel}
@@ -42,11 +42,11 @@ use of the select(2) system call, it internally multiplexes all
 connections without forking, for maximum speed and minimum system
 resource use.
 
-%description -l pl
-Niezwykle szybki i wysoko wydajny serwer WWW (protokó³ HTTP). Bazuje
-na bezpo¶rednim u¿yciu funkcji systemowej select(2) dziêki czemu mo¿e
-obs³ugiwaæ wiele po³±czeñ równocze¶nie bez fork()owania co w efekcie
-znacznie zwiêksza szybko¶æ dzia³ania oraz zmniejsza zu¿ycie zasobów
+%description -l pl.UTF-8
+Niezwykle szybki i wysoko wydajny serwer WWW (protokÃ³Å‚ HTTP). Bazuje
+na bezpoÅ›rednim uÅ¼yciu funkcji systemowej select(2) dziÄ™ki czemu moÅ¼e
+obsÅ‚ugiwaÄ‡ wiele poÅ‚Ä…czeÅ„ rÃ³wnoczeÅ›nie bez fork()owania co w efekcie
+znacznie zwiÄ™ksza szybkoÅ›Ä‡ dziaÅ‚ania oraz zmniejsza zuÅ¼ycie zasobÃ³w
 systemowych.
 
 %prep
