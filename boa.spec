@@ -5,7 +5,7 @@
 %define	_rc		rc21
 %define	_rel	3
 Summary:	Boa high speed HTTP server
-Summary(pl.UTF-8):   Boa - szybki serwer HTTP
+Summary(pl.UTF-8):	Boa - szybki serwer HTTP
 Name:		boa
 Version:	0.94.14
 Release:	0.%{_rc}.%{_rel}
