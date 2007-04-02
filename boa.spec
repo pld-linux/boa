@@ -66,7 +66,7 @@ CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
-	$RPM_BUILD_ROOT/var/log/{,archiv/}boa \
+	$RPM_BUILD_ROOT/var/log/{,archive/}boa \
 	$RPM_BUILD_ROOT%{_sbindir} \
 	$RPM_BUILD_ROOT%{_mandir}/man8 \
 	$RPM_BUILD_ROOT/etc/logrotate.d \
