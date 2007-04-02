@@ -56,7 +56,7 @@ cp examples/boa.conf .
 
 %build
 cp -f /usr/share/automake/config.sub .
-%{__sed} -i 's,},  olddir /var/log/archiv/boa\x0a},' contrib/rpm/boa.logrotate
+%{__sed} -i 's,},  olddir /var/log/archive/boa\x0a},' contrib/rpm/boa.logrotate
 CFLAGS="%{rpmcflags} %{?with_ipv6:-DINET6} -DSERVER_ROOT='\"%{_sysconfdir}\"'"
 %{__autoconf}
 %configure
@@ -122,7 +122,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/boa.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(750,root,root) %dir /var/log/%{name}/
-%attr(750,root,root) %dir /var/log/archiv/%{name}/
+%attr(750,root,root) %dir /var/log/archive/%{name}/
 %attr(640,root,root) %ghost /var/log/%{name}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
