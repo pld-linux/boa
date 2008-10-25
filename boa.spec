@@ -11,7 +11,7 @@ Version:	0.94.14
 Release:	0.%{_rc}.%{_rel}
 Epoch:		1
 License:	GPL v2
-Group:		Networking/Daemons
+Group:		Networking/Daemons/HTTP
 Source0:	http://www.boa.org/%{name}-%{version}%{_rc}.tar.gz
 # Source0-md5:	e24b570bd767a124fcfb40a34d148ba9
 Source1:	%{name}.init
