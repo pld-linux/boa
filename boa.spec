@@ -52,7 +52,7 @@ systemowych.
 %prep
 %setup -q -n %{name}-%{version}%{_rc}
 cp examples/boa.conf .
-%patch0 -p0
+%patch -P0 -p0
 
 %build
 cp -f /usr/share/automake/config.sub .
